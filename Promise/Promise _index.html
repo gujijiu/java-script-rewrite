@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <script src="./Promise.js"></script> -->
+</head>
+<body>
+    <script>
+        const p = new Promise((resolve,reject)=>{
+            resolve(123);
+            // reject('错误');
+            // setTimeout(() => {
+            //     // resolve(123);
+            //     reject('错误');
+            // }, 1000);
+
+        })
+        console.log(p);
+        p.then((value)=>{
+            console.log(value);
+        },(reason)=>{
+            console.warn(reason);
+        })
+
+        p.catch(reason=>{
+            console.warn(reason);
+        });
+        
+
+        //创建 Promise
+        const p1 = new Promise((resolve, reject) => {
+            //1.创建对象
+            const xhr = new XMLHttpRequest();
+            //2. 初始化
+            xhr.open('GET', 'https://api.apiopen.top/api/sentences');
+            //3. 发送
+            xhr.send();
+            //4. 处理响应结果
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    //判断响应状态码 2xx   
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        //控制台输出响应体
+                        resolve(xhr.response);
+                    }else{
+                        //控制台输出响应状态码
+                        reject(xhr.status);
+                    }
+                }
+            }
+        });
+        //调用then方法
+        p1.then(value=>{
+            console.log(value);
+        }, reason=>{
+            console.warn(reason);
+        });
+
+        //const p2 = Promise.resolve(123);
+        const p2 = Promise.resolve(p);
+        console.log(p2);
+        const p3 = Promise.reject(p);
+        p3.then((value)=>{
+            console.log(value);
+        },(reason)=>{
+            console.warn(reason);
+        })
+        const p4 = Promise.all([p3,p2,p1]); 
+        console.log(p4);
+        const result = Promise.race([p2, p3]);
+        console.log(result);
+
+
+
+    </script>
+</body>
+</html>
